@@ -109,11 +109,10 @@ if platform?('redhat', 'centos', 'fedora', 'ubuntu', 'debian', 'amazon')
     only_if {node.default['copperegg']['must_restart'] == true}
   end
 
-  unless node['dev_mode']
-    service 'revealcloud' do
-      supports :start => true, :stop => true, :restart => true
-      action :start
-    end
+  service 'revealcloud' do
+    supports :start => true, :stop => true, :restart => true
+    action :start
+    not_if { node['dev_mode']}
   end
 
 elsif platform?('windows')
@@ -131,10 +130,9 @@ elsif platform?('windows')
     service 'RevealCloud' do
       action :enable
     end
-    unless node['dev_mode']
-      service 'RevealCloud' do
-        action :start
-      end
+    service 'RevealCloud' do
+      action :start
+      not_if { node['dev_mode']}
     end
   end
 end
